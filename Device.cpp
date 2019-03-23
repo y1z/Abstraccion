@@ -103,7 +103,7 @@ bool Device::InitDevice()
 	return false;
 }
 
-ID3D11Device * Device::GetDevice()
+ID3D11Device* Device::GetDevice()
 {
 	return mptr_Device;
 }
