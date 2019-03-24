@@ -346,6 +346,7 @@ HRESULT InitDevice()
 
 	// Create the vertex shader
 	hr = MY_Device.GetDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
+
 	if (FAILED(hr))
 	{
 		pVSBlob->Release();
