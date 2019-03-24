@@ -345,7 +345,7 @@ HRESULT InitDevice()
 	}
 
 	// Create the vertex shader
-	hr = MY_Device.GetDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
+	hr = MY_Device.GetDevice()->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
 
 	if (FAILED(hr))
 	{
@@ -362,7 +362,7 @@ HRESULT InitDevice()
 	UINT numElements = ARRAYSIZE(layout);
 
 	// Create the input layout
-	hr = g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
+	hr = MY_Device.GetDevice()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
 																			 pVSBlob->GetBufferSize(), &g_pVertexLayout);
 	pVSBlob->Release();
 	if (FAILED(hr))
@@ -373,7 +373,7 @@ HRESULT InitDevice()
 
 	// Compile the pixel shader
 	ID3DBlob* pPSBlob = NULL;
-	//hr = CompileShaderFromFile("Abstraccion.fx", "PS", "ps_4_0", &pPSBlob);
+	hr = CompileShaderFromFile(L"Abstraccion.fx", "PS", "ps_4_0", &pPSBlob);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL,
@@ -382,7 +382,7 @@ HRESULT InitDevice()
 	}
 
 	// Create the pixel shader
-	hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);
+	hr = MY_Device.GetDevice()->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);
 	pPSBlob->Release();
 	if (FAILED(hr))
 		return hr;
@@ -426,6 +426,10 @@ HRESULT InitDevice()
 
 	bool IsSucceful = MY_Device.CreateVertexBuffer(sizeof(SimpleVertex), VertexCount,
 																								 static_cast<void*>(vertices), g_pVertexBuffer);
+
+	assert(IsSucceful == true && "Failed Vertex Buffer creacion");
+
+
 	/*
 		D3D11_BUFFER_DESC bd;
 		SecureZeroMemory(&bd, sizeof(bd));
