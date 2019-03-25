@@ -6,9 +6,12 @@ class DeviceContext
 public:
 	DeviceContext();
 	~DeviceContext();
-public:
+public:// functions 
+	ID3D11DeviceContext* GetContext();
+	ID3D11DeviceContext** GetContextPointerRef();
 
-public:// variables 
+
+private:// variables 
 	ID3D11DeviceContext*        mptr_ImmediateContext = nullptr;
 	ID3D11Buffer*               mptr_VertexBuffer = nullptr;
 };

@@ -1,6 +1,6 @@
 #include "CWindow.h"
 
-//LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 
 /*!
@@ -8,13 +8,13 @@
 
 CWindow::CWindow()
 {
+	m_Width = 800;
+	m_Height = 600;
 }
 
 
 CWindow::~CWindow()
 {
-
-
 }
 
 
@@ -24,7 +24,7 @@ bool CWindow::InitWindow()
 	WNDCLASSEX wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wcex.lpfnWndProc = NULL;// poniter to functino
+	wcex.lpfnWndProc = WndProc;// poniter to functino
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
 	wcex.hInstance = m_Instance;
@@ -44,7 +44,7 @@ bool CWindow::InitWindow()
 	m_Wnd = CreateWindowEx(WS_EX_APPWINDOW, TestSTR.c_str(), TestSTR.c_str(), Syle,
 												 0,// DICTAN DONDE ESTA LA VENTANA 
 												 0,// DICTAN DONDE ESTA LA VENTANA 
-												 800, 600,// Dictan las dimenciones de la ventana 
+												 m_Width, m_Height,// Dictan las dimenciones de la ventana 
 												 NULL, // si tuviera otra venta le pasaria el puntero a esta 
 												 NULL,
 												 m_Instance,
@@ -54,7 +54,6 @@ bool CWindow::InitWindow()
 	{
 		return false;
 	}
-
 
 	ShowWindow(m_Wnd, SW_SHOW);
 
@@ -73,28 +72,43 @@ void CWindow::HandleMessage()
 	}
 }
 
+int CWindow::GetWidth()
+{
+	return m_Width;
+}
 
-//
-//
-//LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-//{
-//	PAINTSTRUCT ps;
-//	HDC hdc;
-//
-//	switch (message)
-//	{
-//	case WM_PAINT:
-//		hdc = BeginPaint(hWnd, &ps);
-//		EndPaint(hWnd, &ps);
-//		break;
-//
-//	case WM_DESTROY:
-//		PostQuitMessage(0);
-//		break;
-//
-//	default:
-//		return DefWindowProc(hWnd, message, wParam, lParam);
-//	}
-//
-//	return 0;
-//}
+int CWindow::GetHeight()
+{
+	return m_Height;
+}
+
+HWND CWindow::GetHandle()
+{
+	return m_Wnd;
+}
+
+
+
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	PAINTSTRUCT ps;
+	HDC hdc;
+
+	switch (message)
+	{
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd, &ps);
+		EndPaint(hWnd, &ps);
+		break;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+
+	return 0;
+}

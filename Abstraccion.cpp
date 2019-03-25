@@ -8,6 +8,7 @@
 #include"HeaderForDriecxAndWindows.h"
 #include "Device.h"
 #include "CWindow.h"
+#include "CApp.h"
 #include <cassert>
 //--------------------------------------------------------------------------------------
 // Structures
@@ -71,72 +72,73 @@ using Funcptr_WindProc = LRESULT(CALLBACK *)(HWND, UINT, WPARAM, LPARAM);
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+	CApp *TEST = new CApp();
+
+	return TEST->Run();
 
 
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	/*
-	CWindow Test;
-	Test.InitWindow();
-	while (TRUE)
-	{
-		Test.HandleMessage();
-	}*/
+	//UNREFERENCED_PARAMETER(hPrevInstance);
+	//UNREFERENCED_PARAMETER(lpCmdLine);
+	///*
+	//CWindow Test;
+	//Test.InitWindow();
+	//while (TRUE)
+	//{
+	//	Test.HandleMessage();
+	//}*/
 
 
+	///*
+	//UINT Flags = 0;
+	//Flags |= D3D11_CREATE_DEVICE_DEBUG;
+	//D3D_FEATURE_LEVEL FeatureLevel;
+	//for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
+	//{
+	//	g_driverType = driverTypes[driverTypeIndex];
+	//	hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+	//																		 D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+	//	if (SUCCEEDED(hr))
+	//		break;
+	//}
 
+	//hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_UNKNOWN, NULL, Flags,
+	//											 NULL, 6, D3D11_SDK_VERSION, &g_pd3dDevice,
+	//											 &FeatureLevel, &g_pImmediateContext);
 
-	/*
-	UINT Flags = 0;
-	Flags |= D3D11_CREATE_DEVICE_DEBUG;
-	D3D_FEATURE_LEVEL FeatureLevel;
-	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-	{
-		g_driverType = driverTypes[driverTypeIndex];
-		hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-																			 D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
-		if (SUCCEEDED(hr))
-			break;
-	}
+	//if (FAILED(hr))
+	//{
+	//	assert( SUCCEEDED(hr),"Device Failed creation");
+	//}
+	//*/
 
-	hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_UNKNOWN, NULL, Flags,
-												 NULL, 6, D3D11_SDK_VERSION, &g_pd3dDevice,
-												 &FeatureLevel, &g_pImmediateContext);
+	//if (FAILED(InitWindow(hInstance, nCmdShow)))
+	//	return 0;
 
-	if (FAILED(hr))
-	{
-		assert( SUCCEEDED(hr),"Device Failed creation");
-	}
-	*/
+	//if (FAILED(InitDevice()))
+	//{
+	//	CleanupDevice();
+	//	return 0;
+	//}
 
-	if (FAILED(InitWindow(hInstance, nCmdShow)))
-		return 0;
+	//// Main message loop
+	//MSG msg = { 0 };
 
-	if (FAILED(InitDevice()))
-	{
-		CleanupDevice();
-		return 0;
-	}
+	//while (WM_QUIT != msg.message)
+	//{
+	//	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	//	{
+	//		TranslateMessage(&msg);
+	//		DispatchMessage(&msg);
+	//	}
+	//	else
+	//	{
+	//		Render();
+	//	}
+	//}
 
-	// Main message loop
-	MSG msg = { 0 };
+	//CleanupDevice();
 
-	while (WM_QUIT != msg.message)
-	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			Render();
-		}
-	}
-
-	CleanupDevice();
-
-	return (int)msg.wParam;
+	//return (int)msg.wParam;
 }
 
 //------------------------------------------------------------------------------------
@@ -164,7 +166,7 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 	if (!RegisterClassEx(&wcex))
 		return E_FAIL;
 
-		// Create window
+	// Create window
 	g_hInst = hInstance;
 	RECT rc = { 0, 0, 640, 480 };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
@@ -226,28 +228,6 @@ HRESULT InitDevice()
 	GetClientRect(g_hWnd, &rc);
 	UINT width = rc.right - rc.left;
 	UINT height = rc.bottom - rc.top;
-//
-//	UINT createDeviceFlags = 0;
-//
-//#ifdef _DEBUG
-//	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-//#endif
-//
-//	D3D_DRIVER_TYPE driverTypes[] =
-//	{
-//			D3D_DRIVER_TYPE_HARDWARE,
-//			D3D_DRIVER_TYPE_WARP,
-//			D3D_DRIVER_TYPE_REFERENCE,
-//	};
-//	UINT numDriverTypes = ARRAYSIZE(driverTypes);
-//
-//	D3D_FEATURE_LEVEL featureLevels[] =
-//	{
-//			D3D_FEATURE_LEVEL_11_0,
-//			D3D_FEATURE_LEVEL_10_1,
-//			D3D_FEATURE_LEVEL_10_0,
-//	};
-//	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
 	DXGI_SWAP_CHAIN_DESC sd;
 	ZeroMemory(&sd, sizeof(sd));
@@ -262,23 +242,9 @@ HRESULT InitDevice()
 	sd.SampleDesc.Count = 1;
 	sd.SampleDesc.Quality = 0;
 	sd.Windowed = TRUE;
-	
-	/*
-	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-	{
-		g_driverType = driverTypes[driverTypeIndex];
-		hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-																			 D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
-		if (SUCCEEDED(hr))
-			break;
-	}
-	if (FAILED(hr))
-		return hr;
-	*/
 
-	MY_Device.InitDeviceAndSwapChain(&sd, g_pSwapChain, g_pImmediateContext);
-
-
+	// Inits Divece
+//	MY_Device.InitDeviceAndSwapChain(&sd, g_pSwapChain, g_pImmediateContext);
 
 	// Create a render target view
 	ID3D11Texture2D* pBackBuffer = NULL;
@@ -340,7 +306,8 @@ HRESULT InitDevice()
 	if (FAILED(hr))
 	{
 		MessageBox(NULL,
-							 L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
+							 L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file."
+							 , L"Error", MB_OK);
 		return hr;
 	}
 
@@ -363,7 +330,7 @@ HRESULT InitDevice()
 
 	// Create the input layout
 	hr = MY_Device.GetDevice()->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
-																			 pVSBlob->GetBufferSize(), &g_pVertexLayout);
+																								pVSBlob->GetBufferSize(), &g_pVertexLayout);
 	pVSBlob->Release();
 	if (FAILED(hr))
 		return hr;
@@ -423,92 +390,86 @@ HRESULT InitDevice()
 
 	uint32_t VertexCount = ARRAYSIZE(vertices);
 
-
-	bool IsSucceful = MY_Device.CreateVertexBuffer(sizeof(SimpleVertex), VertexCount,
+	// has D3D11_BUFFER_DESC Inside 
+	bool IsCreated = MY_Device.CreateVertexBuffer(sizeof(SimpleVertex), VertexCount,
 																								 static_cast<void*>(vertices), g_pVertexBuffer);
 
-	assert(IsSucceful == true && "Failed Vertex Buffer creacion");
+	assert(IsCreated == true && g_pVertexBuffer != NULL &&"Failed Vertex Buffer creation");
 
+	D3D11_BUFFER_DESC bd;
+	SecureZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(SimpleVertex) * VertexCount;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = 0;
 
-	/*
-		D3D11_BUFFER_DESC bd;
-		SecureZeroMemory(&bd, sizeof(bd));
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(SimpleVertex) * 24;
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-		D3D11_SUBRESOURCE_DATA InitData;
-		SecureZeroMemory(&InitData, sizeof(InitData));
-		InitData.pSysMem = vertices;
-		hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
-		if (FAILED(hr))
-			return hr;
+	D3D11_SUBRESOURCE_DATA InitData;
+	SecureZeroMemory(&InitData, sizeof(InitData));
+	InitData.pSysMem = vertices;
 
-		// Set vertex buffer
-		UINT stride = sizeof(SimpleVertex);
-		UINT offset = 0;
-		g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
+	// Set vertex buffer
+	UINT stride = sizeof(SimpleVertex);
+	UINT offset = 0;
+	g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
 
-		// Create index buffer
-		// Create vertex buffer
-		WORD indices[] =
-		{
-				3,1,0,
-				2,1,3,
+	// Create index buffer
+	// Create vertex buffer
+	WORD indices[] =
+	{
+			3,1,0,
+			2,1,3,
 
-				6,4,5,
-				7,4,6,
+			6,4,5,
+			7,4,6,
 
-				11,9,8,
-				10,9,11,
+			11,9,8,
+			10,9,11,
 
-				14,12,13,
-				15,12,14,
+			14,12,13,
+			15,12,14,
 
-				19,17,16,
-				18,17,19,
+			19,17,16,
+			18,17,19,
 
-				22,20,21,
-				23,20,22
-		};
+			22,20,21,
+			23,20,22
+	};
 
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(WORD) * 36;
-		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-		InitData.pSysMem = indices;
-		hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
-		if (FAILED(hr))
-			return hr;*/
+	uint32_t IndiceCount = ARRAYSIZE(indices);
 
-			// Set index buffer
+	IsCreated =	MY_Device.CreateIndexBuffer(sizeof(WORD), IndiceCount,indices, g_pIndexBuffer);
+
+	assert(IsCreated == true, "Failed Index Buffer creation");
+
+	// Set index buffer
 	g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 	// Set primitive topology
 	g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Create the constant buffers
-	/*
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(CBNeverChanges);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
-	hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBNeverChanges);
+
+
+	hr = MY_Device.GetDevice()->CreateBuffer(&bd, NULL, &g_pCBNeverChanges);
 	if (FAILED(hr))
 		return hr;
 
 	bd.ByteWidth = sizeof(CBChangeOnResize);
-	hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
+	hr = MY_Device.GetDevice()->CreateBuffer(&bd, NULL, &g_pCBChangeOnResize);
 	if (FAILED(hr))
 		return hr;
 
 	bd.ByteWidth = sizeof(CBChangesEveryFrame);
-	hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
+	hr = MY_Device.GetDevice()->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
 	if (FAILED(hr))
 		return hr;
-	*/
+	
 	// Load the Texture
-//	hr = D3DX11CreateShaderResourceViewFromFile(g_pd3dDevice, "seafloor.dds", NULL, NULL, &g_pTextureRV, NULL);
+  hr = D3DX11CreateShaderResourceViewFromFile(MY_Device.GetDevice(), L"seafloor.dds", NULL, NULL, &g_pTextureRV, NULL);
 	if (FAILED(hr))
 		return hr;
 
@@ -522,7 +483,7 @@ HRESULT InitDevice()
 	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
+	hr = MY_Device.GetDevice()->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
 	if (FAILED(hr))
 		return hr;
 
@@ -579,29 +540,29 @@ void CleanupDevice()
 //--------------------------------------------------------------------------------------
 // Called every time the application receives a message
 //--------------------------------------------------------------------------------------
-
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	PAINTSTRUCT ps;
-	HDC hdc;
-
-	switch (message)
-	{
-	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
-		EndPaint(hWnd, &ps);
-		break;
-
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
-	}
-
-	return 0;
-}
+//
+//LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+//{
+//	PAINTSTRUCT ps;
+//	HDC hdc;
+//
+//	switch (message)
+//	{
+//		case WM_PAINT:
+//			hdc = BeginPaint(hWnd, &ps);
+//			EndPaint(hWnd, &ps);
+//			break;
+//
+//		case WM_DESTROY:
+//			PostQuitMessage(0);
+//			break;
+//
+//		default:
+//			return DefWindowProc(hWnd, message, wParam, lParam);
+//	}
+//
+//	return 0;
+//}
 
 
 //--------------------------------------------------------------------------------------

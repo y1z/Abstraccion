@@ -12,6 +12,11 @@ public:// functions
 	bool InitWindow();
 	void HandleMessage();
 
+	int GetWidth();
+	int GetHeight();
+
+	HWND GetHandle();
+
 
 private:// variables 
 	HINSTANCE m_Instance;
