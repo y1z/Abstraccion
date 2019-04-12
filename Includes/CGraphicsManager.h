@@ -22,10 +22,18 @@ public:// functions
 	CTexture* CreateRenderTragetFromBackBuffer();
 
 	void SetRenderTargetView(CTexture &Rendertarget,  CTexture *DepthStencil = NULL);
+	void SetConstanteBuffer(CBuffer &Constbuffer);
 	void ClearRenderTargetView(CTexture &RenderTarget, float *ptr);
 	void Present(int A = 0 , int B = 0);
 
+	bool CreateBuffer(CBuffer &buffer);
+
 	void DebugTestBuffer(CBuffer &d);
+
+	void InitViewPort();
+
+	int SlotCount = 0;
+
 private:// variables 
 	CDevice *mptr_Device = nullptr;
 	DeviceContext *mptr_DeviceContext = nullptr;

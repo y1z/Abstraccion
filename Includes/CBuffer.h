@@ -11,6 +11,9 @@ public:// functions
 	template <typename T>
 	bool InitBufferData(T* DataStruct, uint32_t m_CountElements,
 											uint32_t Stride, D3D11_BIND_FLAG bufferType);
+	
+	template<typename T>
+	bool InitConstanteBuffer(uint32_t Size, T *DataStruct);
 
 	D3D11_BUFFER_DESC GetDesc();
 	D3D11_BUFFER_DESC* GetDescRef();
@@ -35,7 +38,7 @@ private:
 	UINT m_Stride = 0;
 	UINT m_OffSet = 0;
 
-	D3D11_BIND_FLAG m_BufferType = D3D11_BIND_VERTEX_BUFFER;
+	D3D11_BIND_FLAG m_BufferType;
 	D3D11_BUFFER_DESC m_Discriptor;
 	D3D11_SUBRESOURCE_DATA m_data;
 };
@@ -73,6 +76,27 @@ inline bool CBuffer::InitBufferData(T * DataStruct, uint32_t CountElements,
 	return true;
 }
 
+template<typename T>
+inline bool CBuffer::InitConstanteBuffer(uint32_t Size, T * DataStruct)
+{
+	// this is so the descriptor doesn't have garbage or irreverent data  
+	memset(&m_Discriptor, 0, sizeof(m_Discriptor));
+	m_Discriptor.Usage = D3D11_USAGE_DEFAULT;
+	m_Discriptor.ByteWidth = Size;
+	m_Discriptor.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
+	m_BufferType = D3D11_BIND_CONSTANT_BUFFER;
+
+	m_Discriptor.CPUAccessFlags = 0;
+	// this is so the SUB-RESOURCE doesn't have garbage or irreverent data 
+	memset(&m_data, 0, sizeof(m_data));
+
+	m_data.pSysMem = DataStruct;
+
+
+	return true;
+}
+
 inline CBuffer::CBuffer(){
 	SecureZeroMemory(&m_Discriptor, sizeof(m_Discriptor));
 	m_Discriptor.Usage = D3D11_USAGE_DEFAULT;
@@ -105,7 +129,7 @@ inline D3D11_SUBRESOURCE_DATA * CBuffer::GetDataRef()
 	return &m_data;
 }
 
-inline ID3D11Buffer * CBuffer::GetBuffer()
+inline ID3D11Buffer * CBuffer::GetBuffer() 
 {
 	return mptr_Buffer;
 }

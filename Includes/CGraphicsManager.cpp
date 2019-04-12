@@ -24,15 +24,10 @@ bool CGraphicsManager::InitGraphics(CWindow *Window)
 	mptr_Device = new CDevice();
 	mptr_SwapChain = new CSwapChain();
 	mptr_DeviceContext = new DeviceContext();
-	mptr_Buffer = new CBuffer();
-
 
 
 
 	Result = mptr_Device->InitDevice(mptr_SwapChain, mptr_DeviceContext, Window);
-	DebugTestBuffer(*mptr_Buffer);
-
-	mptr_Device->CreateVertexBuffer(*mptr_Buffer);
 
 	return Result;
 }
@@ -63,6 +58,12 @@ void CGraphicsManager::SetRenderTargetView(CTexture & Rendertarget,  CTexture * 
 
 }
 
+void CGraphicsManager::SetConstanteBuffer(CBuffer & Constbuffer)
+{
+	mptr_DeviceContext->GetDirecXContext()->PSSetConstantBuffers(SlotCount++, 1, Constbuffer.GetBufferRef());
+
+}
+
 
 void CGraphicsManager::ClearRenderTargetView(CTexture & RenderTarget, float *ptr_color )
 {
@@ -73,6 +74,17 @@ void CGraphicsManager::ClearRenderTargetView(CTexture & RenderTarget, float *ptr
 void CGraphicsManager::Present(int A, int Flags)
 {
 	mptr_SwapChain->GetSwapChian()->Present(A, Flags);
+}
+
+bool CGraphicsManager::CreateBuffer(CBuffer & buffer)
+{
+	HRESULT Hr = S_OK;
+	Hr = mptr_Device->GetDevice()->CreateBuffer(buffer.GetDescRef(), buffer.GetDataRef(), buffer.GetBufferRef());
+	if (FAILED(Hr))
+	{
+		return false;
+	}
+	return true;
 }
 
 void CGraphicsManager::DebugTestBuffer(CBuffer &d)

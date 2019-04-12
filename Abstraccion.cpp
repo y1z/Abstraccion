@@ -75,11 +75,12 @@ using Funcptr_WindProc = LRESULT(CALLBACK *)(HWND, UINT, WPARAM, LPARAM);
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 
-	///------------------------------
-	//CApp *App = new CApp();
 
-	//return App->Run();	
-	///-----------------------
+	CApp *App = new CApp();
+
+	return App->Run();	
+	
+
 
 	//UNREFERENCED_PARAMETER(hPrevInstance);
 	//UNREFERENCED_PARAMETER(lpCmdLine);
@@ -407,13 +408,16 @@ HRESULT InitDevice()
 
 	uint32_t offSet = 0;
 
+	CBuffer Test;
+
+///	Test.InitBufferData(vertices, VertexCount, 0, D3D11_BIND_VERTEX_BUFFER);
+
 	// has D3D11_BUFFER_DESC Inside 
 	bool IsCreated = false;
 	/* IsCreated = MY_Device.CreateVertexBuffer(sizeof(SimpleVertex), VertexCount,
 																								static_cast<void*>(vertices), Test.mptr_Buffer);*/
 
 	///MY_Device.CreateVertexBuffer(Test);
-
 
 
 	//assert(IsCreated == true && "Failed Vertex Buffer creation");
