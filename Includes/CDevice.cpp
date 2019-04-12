@@ -1,17 +1,16 @@
-#include "Device.h"
-
+#include "CDevice.h"
 
 //! \todo Finish InitDevice
 
 
-Device::Device(){
+CDevice::CDevice(){
 
 	
 }
 
 
 
-Device::~Device()
+CDevice::~CDevice()
 {
 
 	if (mptr_Device != nullptr) { mptr_Device->Release(); }
@@ -24,7 +23,7 @@ Device::~Device()
 	\param [in] DataVertex it's a pointer to INITIALIZED memory
 	\param [out] VertexBuffer The Resulting vertexBuffer
 */
-bool Device::CreateVertexBuffer(uint32_t SizeVertex, uint32_t CountVertex,
+bool CDevice::CreateVertexBuffer(uint32_t SizeVertex, uint32_t CountVertex,
 																void *DataVertex, ID3D11Buffer  *&VertexBuffer)
 {
 	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -57,7 +56,7 @@ bool Device::CreateVertexBuffer(uint32_t SizeVertex, uint32_t CountVertex,
 	\param [out] IndiceBuffer The Resulting Buffer for Indices 
 */
 
-bool Device::CreateIndexBuffer(uint32_t SizeIndice, uint32_t CountIndice,
+bool CDevice::CreateIndexBuffer(uint32_t SizeIndice, uint32_t CountIndice,
 															 void* DataIndice, ID3D11Buffer *&IndiceBuffer)
 {
 	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -69,6 +68,17 @@ bool Device::CreateIndexBuffer(uint32_t SizeIndice, uint32_t CountIndice,
 
 	HRESULT	hr = mptr_Device->CreateBuffer(&m_BufferDesc, &m_InitData, &IndiceBuffer);
 	if (FAILED(hr))
+		return false;
+
+	return true;
+}
+
+bool CDevice::CreateVertexBuffer(CBuffer & buffer)
+{
+	HRESULT Result = S_OK;
+	Result = mptr_Device->CreateBuffer(buffer.GetDescRef(), buffer.GetDataRef(), buffer.GetBufferRef());
+
+	if (FAILED(Result))
 		return false;
 
 	return true;
@@ -141,7 +151,7 @@ bool Device::CreateIndexBuffer(uint32_t SizeIndice, uint32_t CountIndice,
 //	return false;
 //}
 
-bool Device::InitDevice(CSwapChain *SwapChain, DeviceContext *Context, CWindow *Window)
+bool CDevice::InitDevice(CSwapChain *SwapChain, DeviceContext *Context, CWindow *Window)
 {
 //	CWindow
 
@@ -154,7 +164,7 @@ bool Device::InitDevice(CSwapChain *SwapChain, DeviceContext *Context, CWindow *
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.OutputWindow = Window->GetHandle();
+	sd.OutputWindow = Window->GetHandleRef();
 	sd.SampleDesc.Count = 1;
 	sd.SampleDesc.Quality = 0;
 	sd.Windowed = TRUE;
@@ -191,17 +201,15 @@ bool Device::InitDevice(CSwapChain *SwapChain, DeviceContext *Context, CWindow *
 
 	}
 
-
-
-
-
-
 	return false;
 }
 
-ID3D11Device* Device::GetDevice()
+ID3D11Device* CDevice::GetDevice() const
 {
 	return mptr_Device;
 }
 
-
+ID3D11Device ** CDevice::GetDeviceRef()
+{
+	return  &mptr_Device;
+}

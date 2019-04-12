@@ -87,6 +87,13 @@ HWND CWindow::GetHandle()
 	return m_Wnd;
 }
 
+HWND & CWindow::GetHandleRef()
+{
+	// TODO: insert return statement here
+	return m_Wnd;
+}
+
+
 
 
 
@@ -97,17 +104,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
-	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
-		EndPaint(hWnd, &ps);
-		break;
+		case WM_PAINT:
+			hdc = BeginPaint(hWnd, &ps);
+			EndPaint(hWnd, &ps);
+			break;
 
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			break;
 
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 
 	return 0;

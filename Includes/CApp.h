@@ -15,6 +15,7 @@ public:// function
 private:// variables 
 	CGraphicsManager * m_GraphManager = nullptr;
 	CWindow* mptr_Window = nullptr;
+	CTexture* mptr_RenderTargetView = nullptr;
 
 	bool isRunnig = true;
 };

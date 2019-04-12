@@ -7,7 +7,7 @@ public:
 	DeviceContext();
 	~DeviceContext();
 public:// functions 
-	ID3D11DeviceContext* GetContext();
+	ID3D11DeviceContext* GetDirecXContext();
 	ID3D11DeviceContext** GetContextPointerRef();
 
 

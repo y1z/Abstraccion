@@ -5,10 +5,12 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //--------------------------------------------------------------------------------------
-#include"HeaderForDriecxAndWindows.h"
-#include "Device.h"
-#include "CWindow.h"
-#include "CApp.h"
+#include <Includes/Usable_Window.h>
+#include <Includes/DirectX_Stuff.h>
+#include "Includes/CDevice.h"
+#include "Includes/CWindow.h"
+#include "Includes/CApp.h""
+#include <Includes/CBuffer.h> 
 #include <cassert>
 //--------------------------------------------------------------------------------------
 // Structures
@@ -19,7 +21,7 @@
 /*
 * CLASSES
 */
-Device MY_Device;
+CDevice MY_Device;
 
 //--------------------------------------------------------------------------------------
 // Global Variables
@@ -72,14 +74,15 @@ using Funcptr_WindProc = LRESULT(CALLBACK *)(HWND, UINT, WPARAM, LPARAM);
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	CApp *TEST = new CApp();
 
-	return TEST->Run();
+	///------------------------------
+	//CApp *App = new CApp();
 
+	//return App->Run();	
+	///-----------------------
 
 	//UNREFERENCED_PARAMETER(hPrevInstance);
 	//UNREFERENCED_PARAMETER(lpCmdLine);
-	///*
 	//CWindow Test;
 	//Test.InitWindow();
 	//while (TRUE)
@@ -87,8 +90,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//	Test.HandleMessage();
 	//}*/
 
-
-	///*
 	//UINT Flags = 0;
 	//Flags |= D3D11_CREATE_DEVICE_DEBUG;
 	//D3D_FEATURE_LEVEL FeatureLevel;
@@ -109,16 +110,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//{
 	//	assert( SUCCEEDED(hr),"Device Failed creation");
 	//}
-	//*/
+	//
 
-	//if (FAILED(InitWindow(hInstance, nCmdShow)))
-	//	return 0;
+	if (FAILED(InitWindow(hInstance, nCmdShow)))
+		return 0;
 
-	//if (FAILED(InitDevice()))
-	//{
-	//	CleanupDevice();
-	//	return 0;
-	//}
+	if (FAILED(InitDevice()))
+	{
+		CleanupDevice();
+		return 0;
+	}
 
 	//// Main message loop
 	//MSG msg = { 0 };
@@ -146,8 +147,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 //--------------------------------------------------------------------------------------
 HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 {
-
-
 	// Register class
 
 	WNDCLASSEX wcex;
@@ -245,6 +244,22 @@ HRESULT InitDevice()
 
 	// Inits Divece
 //	MY_Device.InitDeviceAndSwapChain(&sd, g_pSwapChain, g_pImmediateContext);
+	UINT Flags = 0;
+	Flags |= D3D11_CREATE_DEVICE_DEBUG;
+	D3D_FEATURE_LEVEL FeatureLevel;
+
+	hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, Flags, nullptr, 0,
+																		 D3D11_SDK_VERSION, &sd, &g_pSwapChain, MY_Device.GetDeviceRef(), &g_featureLevel, &g_pImmediateContext);
+
+	/*hr = D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, Flags,
+												 NULL, 0, D3D11_SDK_VERSION, &g_pd3dDevice,
+												 &FeatureLevel, &g_pImmediateContext);*/
+
+	if (FAILED(hr))
+	{
+		assert(SUCCEEDED(hr), "Device Failed creation");
+	}
+
 
 	// Create a render target view
 	ID3D11Texture2D* pBackBuffer = NULL;
@@ -390,11 +405,18 @@ HRESULT InitDevice()
 
 	uint32_t VertexCount = ARRAYSIZE(vertices);
 
-	// has D3D11_BUFFER_DESC Inside 
-	bool IsCreated = MY_Device.CreateVertexBuffer(sizeof(SimpleVertex), VertexCount,
-																								 static_cast<void*>(vertices), g_pVertexBuffer);
+	uint32_t offSet = 0;
 
-	assert(IsCreated == true && g_pVertexBuffer != NULL &&"Failed Vertex Buffer creation");
+	// has D3D11_BUFFER_DESC Inside 
+	bool IsCreated = false;
+	/* IsCreated = MY_Device.CreateVertexBuffer(sizeof(SimpleVertex), VertexCount,
+																								static_cast<void*>(vertices), Test.mptr_Buffer);*/
+
+	///MY_Device.CreateVertexBuffer(Test);
+
+
+
+	//assert(IsCreated == true && "Failed Vertex Buffer creation");
 
 	D3D11_BUFFER_DESC bd;
 	SecureZeroMemory(&bd, sizeof(bd));
@@ -437,7 +459,7 @@ HRESULT InitDevice()
 
 	uint32_t IndiceCount = ARRAYSIZE(indices);
 
-	IsCreated =	MY_Device.CreateIndexBuffer(sizeof(WORD), IndiceCount,indices, g_pIndexBuffer);
+	IsCreated = MY_Device.CreateIndexBuffer(sizeof(WORD), IndiceCount, indices, g_pIndexBuffer);
 
 	assert(IsCreated == true, "Failed Index Buffer creation");
 
@@ -467,9 +489,9 @@ HRESULT InitDevice()
 	hr = MY_Device.GetDevice()->CreateBuffer(&bd, NULL, &g_pCBChangesEveryFrame);
 	if (FAILED(hr))
 		return hr;
-	
+
 	// Load the Texture
-  hr = D3DX11CreateShaderResourceViewFromFile(MY_Device.GetDevice(), L"seafloor.dds", NULL, NULL, &g_pTextureRV, NULL);
+	hr = D3DX11CreateShaderResourceViewFromFile(MY_Device.GetDevice(), L"seafloor.dds", NULL, NULL, &g_pTextureRV, NULL);
 	if (FAILED(hr))
 		return hr;
 

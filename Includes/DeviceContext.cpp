@@ -12,7 +12,7 @@ DeviceContext::~DeviceContext()
 	mptr_ImmediateContext->Release();
 }
 
-ID3D11DeviceContext * DeviceContext::GetContext()
+ID3D11DeviceContext * DeviceContext::GetDirecXContext()
 {
 	return mptr_ImmediateContext;
 }
