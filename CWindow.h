@@ -22,7 +22,7 @@ public:// functions
 private:// variables 
 	HINSTANCE m_Instance;
 	HRESULT m_Result;
-	std::wstring TestSTR = L"Vetana_Meca";
+	std::wstring m_WindowName = L"Vetana_Meca";
 	HWND m_Wnd;
 
 	int m_Width;

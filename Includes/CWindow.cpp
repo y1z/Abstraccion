@@ -32,7 +32,7 @@ bool CWindow::InitWindow()
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wcex.lpszMenuName = NULL;
-	wcex.lpszClassName = TestSTR.c_str();
+	wcex.lpszClassName = m_WindowName.c_str();
 	wcex.hIconSm = wcex.hIcon;
 
 	if (!RegisterClassEx(&wcex))
@@ -40,8 +40,7 @@ bool CWindow::InitWindow()
 
 	int Syle = WS_OVERLAPPEDWINDOW;
 
-
-	m_Wnd = CreateWindowEx(WS_EX_APPWINDOW, TestSTR.c_str(), TestSTR.c_str(), Syle,
+	m_Wnd = CreateWindowEx(WS_EX_APPWINDOW, m_WindowName.c_str(), m_WindowName.c_str(), Syle,
 												 0,// DICTAN DONDE ESTA LA VENTANA 
 												 0,// DICTAN DONDE ESTA LA VENTANA 
 												 m_Width, m_Height,// Dictan las dimenciones de la ventana 

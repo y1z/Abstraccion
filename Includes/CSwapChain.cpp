@@ -18,9 +18,7 @@ CTexture* CSwapChain::GetFromBuffer(uint32_t indice)
 {
 	CTexture * ptr_Texture = new CTexture();
 
-
 	mptr_SwapChain->GetBuffer(indice, __uuidof(ID3D11Texture2D), (LPVOID*)ptr_Texture->GetTexture2DRef());
-
 
 	return ptr_Texture;
 }

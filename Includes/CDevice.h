@@ -2,7 +2,7 @@
 #include <Includes/Usable_Window.h>
 #include <Includes/DirectX_Stuff.h>
 #include "CSwapChain.h"
-#include "DeviceContext.h"
+#include "CDeviceContext.h"
 #include "Structs.h"
 #include "CWindow.h"
 #include "CBuffer.h"
@@ -20,13 +20,9 @@ public: // functions
 	bool CreateIndexBuffer(uint32_t SizeVertex, uint32_t CountVertex,
 												 void* Data, ID3D11Buffer *&);
 
-	bool CreateVertexBuffer(CBuffer &buffer);
+	bool CreateBuffer(CBuffer &buffer);
 
-	//bool InitDeviceAndSwapChain(DXGI_SWAP_CHAIN_DESC *DescSwapChain,
-	//														IDXGISwapChain *&SwapChain,
-	//														ID3D11DeviceContext *&DeviceContext);
-
-	bool InitDevice(CSwapChain *, DeviceContext *, CWindow *);
+	bool InitDevice(CSwapChain *, CDeviceContext *, CWindow *);
 
 	ID3D11Device* GetDevice() const;
 	ID3D11Device** GetDeviceRef();

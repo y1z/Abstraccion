@@ -1,11 +1,9 @@
 #include "CDevice.h"
 
-//! \todo Finish InitDevice
-
 
 CDevice::CDevice(){
 
-	
+
 }
 
 
@@ -24,7 +22,7 @@ CDevice::~CDevice()
 	\param [out] VertexBuffer The Resulting vertexBuffer
 */
 bool CDevice::CreateVertexBuffer(uint32_t SizeVertex, uint32_t CountVertex,
-																void *DataVertex, ID3D11Buffer  *&VertexBuffer)
+																 void *DataVertex, ID3D11Buffer  *&VertexBuffer)
 {
 	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;
 
@@ -43,7 +41,6 @@ bool CDevice::CreateVertexBuffer(uint32_t SizeVertex, uint32_t CountVertex,
 	if (FAILED(hr))
 		return false;
 
-
 	return	true;
 }
 
@@ -53,11 +50,11 @@ bool CDevice::CreateVertexBuffer(uint32_t SizeVertex, uint32_t CountVertex,
 	\param [in] SizeIndice tells the size of a SINGLE Indice in bytes.
 	\param [in] CountIndice How many Indices there are.
 	\param [in] DataIndice it's a pointer to INITIALIZED memory
-	\param [out] IndiceBuffer The Resulting Buffer for Indices 
+	\param [out] IndiceBuffer The Resulting Buffer for Indices
 */
 
 bool CDevice::CreateIndexBuffer(uint32_t SizeIndice, uint32_t CountIndice,
-															 void* DataIndice, ID3D11Buffer *&IndiceBuffer)
+																void* DataIndice, ID3D11Buffer *&IndiceBuffer)
 {
 	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	m_BufferDesc.ByteWidth = SizeIndice * CountIndice;
@@ -72,8 +69,8 @@ bool CDevice::CreateIndexBuffer(uint32_t SizeIndice, uint32_t CountIndice,
 
 	return true;
 }
-
-bool CDevice::CreateVertexBuffer(CBuffer & buffer)
+/*! The Buffer should Have the data within it self */
+bool CDevice::CreateBuffer(CBuffer & buffer)
 {
 	HRESULT Result = S_OK;
 	Result = mptr_Device->CreateBuffer(buffer.GetDescRef(), buffer.GetDataRef(), buffer.GetBufferRef());
@@ -84,76 +81,9 @@ bool CDevice::CreateVertexBuffer(CBuffer & buffer)
 	return true;
 }
 
-/*!
-\brief inti a Device in combination with a SwapChain 
-\param [in] DescSwapChain a Descriptor Struct that contain information of the Swap chain 
-\param [out] SwapChain in other word what controls whats drawn to the screen 
-\param [out] DeviceContext This variable will set all values created by the Device 
-*/
-
-
-//
-//bool Device::InitDeviceAndSwapChain(DXGI_SWAP_CHAIN_DESC *DescSwapChain, IDXGISwapChain *&SwapChain,
-//																		ID3D11DeviceContext *&DeviceContext)
-//{
-//	/*! \todo make the InitDeviceAndSwapChain have the ability
-// to use D3D_DRIVER_TYPE_SOFTWARE in the case all the other ones fails*/
-//	D3D_DRIVER_TYPE DrivesOpctions[] = {
-// D3D_DRIVER_TYPE_HARDWARE,
-// D3D_DRIVER_TYPE_REFERENCE,
-// D3D_DRIVER_TYPE_UNKNOWN,
-// D3D_DRIVER_TYPE_WARP,
-// D3D_DRIVER_TYPE_NULL,
-// D3D_DRIVER_TYPE_SOFTWARE
-//	};
-//
-//
-//	UINT Flags = 0;
-//#ifdef _DEBUG
-//	Flags |= D3D11_CREATE_DEVICE_DEBUG;
-//#endif
-//
-//	HRESULT	 IsDiveceCreated S_OK;
-//
-//	for (char i = 0; i < ARRAYSIZE(DrivesOpctions); ++i)
-//	{
-//		IsDiveceCreated = D3D11CreateDeviceAndSwapChain(NULL, DrivesOpctions[i], NULL,
-//																					 Flags, NULL, NULL, 
-//																					 D3D11_SDK_VERSION, DescSwapChain, &SwapChain
-//																					 , &mptr_Device, NULL, &DeviceContext);
-//		if (SUCCEEDED(IsDiveceCreated))
-//		{
-//			return true;
-//		}
-//
-//	}
-//
-//	return false;
-//}
-
-//bool Device::InitDevice()
-//{
-//	/*
-//	HRESULT hr = S_OK;
-//
-//		IDXGIDevice * pDXGIDevice = nullptr;
-//	hr = mptr_Device->QueryInterface(__uuidof(IDXGIDevice), (void **)&pDXGIDevice);
-//
-//
-//	IDXGIAdapter * pDXGIAdapter = nullptr;
-//	hr = pDXGIDevice->GetAdapter(&pDXGIAdapter);
-//
-//	IDXGIFactory * pIDXGIFactory = nullptr;
-//	pDXGIAdapter->GetParent(__uuidof(IDXGIFactory), (void **)&pIDXGIFactory);
-//
-//	D3D11CreateDevice()*/
-//
-//	return false;
-//}
-
-bool CDevice::InitDevice(CSwapChain *SwapChain, DeviceContext *Context, CWindow *Window)
+/*! Creates the Device along with SwapChain and DeviceContext*/
+bool CDevice::InitDevice(CSwapChain *SwapChain, CDeviceContext *Context, CWindow *Window)
 {
-//	CWindow
 
 	DXGI_SWAP_CHAIN_DESC sd;
 	ZeroMemory(&sd, sizeof(sd));
@@ -168,8 +98,6 @@ bool CDevice::InitDevice(CSwapChain *SwapChain, DeviceContext *Context, CWindow 
 	sd.SampleDesc.Count = 1;
 	sd.SampleDesc.Quality = 0;
 	sd.Windowed = TRUE;
-//	/*! \todo make the InitDeviceAndSwapChain have the ability
- //to use D3D_DRIVER_TYPE_SOFTWARE in the case all the other ones fails*/
 
 	D3D_DRIVER_TYPE DrivesOpctions[] = {
  D3D_DRIVER_TYPE_HARDWARE,

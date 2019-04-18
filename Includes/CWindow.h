@@ -1,7 +1,6 @@
 #pragma once
-#include <Windows.h>
+#include <Includes/Usable_Window.h>
 #include <string>
-
 
 class CWindow
 {
@@ -22,7 +21,7 @@ public:// functions
 private:// variables 
 	HINSTANCE m_Instance;
 	HRESULT m_Result;
-	std::wstring TestSTR = L"Vetana_Meca";
+	std::wstring m_WindowName = L"Vetana_Meca";
 	HWND m_Wnd;
 
 	int m_Width;

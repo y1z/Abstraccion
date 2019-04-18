@@ -1,6 +1,5 @@
 #pragma once
-/*!To have the ability to use function with min or max
-function or variable named "min" or "max" */
+/*!To have the ability to use functions or variables with the names "min" or "max"*/
 #define NOMINMAX
 //! disables serial communication api 
 #define NOCOMM 
@@ -8,4 +7,3 @@ function or variable named "min" or "max" */
 #define WIN32_LEAN_AND_MEAN 
 
 #include <windows.h>
-//

@@ -1,14 +1,21 @@
 #pragma once
-#include "HeaderForDriecxAndWindows.h"
+#include <Includes/Usable_Window.h>
+#include <Includes/DirectX_Stuff.h>
 
-class DeviceContext
+class CDeviceContext
 {
 public:
-	DeviceContext();
-	~DeviceContext();
+	CDeviceContext();
+	~CDeviceContext();
 public:// functions 
+
 	ID3D11DeviceContext* GetDirecXContext();
+	//! 
 	ID3D11DeviceContext** GetContextPointerRef();
+
+	/*! This function exist to help create a window with 
+	no argument*/
+	void SetDefaultViewPort();
 
 
 private:// variables 

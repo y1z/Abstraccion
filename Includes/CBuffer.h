@@ -2,6 +2,15 @@
 #include<Includes/Usable_Window.h>
 #include<Includes/DirectX_Stuff.h>
 
+/*!
+\file 
+\class CBuffer "CBuffer.h" 
+\brief this is a general buffer class it has the ability to be a 
+Index buffer , Vertex buffer and Constant buffer, just call the respective 
+init Method then use 
+
+*/
+
 class CBuffer
 {
 public:// constructor
@@ -42,7 +51,7 @@ private:
 	D3D11_BUFFER_DESC m_Discriptor;
 	D3D11_SUBRESOURCE_DATA m_data;
 };
-
+// can be Index buffer or Vertex buffer 
 template<typename T>
 inline bool CBuffer::InitBufferData(T * DataStruct, uint32_t CountElements,
 																		uint32_t OffSet, D3D11_BIND_FLAG bufferType)
@@ -92,7 +101,6 @@ inline bool CBuffer::InitConstanteBuffer(uint32_t Size, T * DataStruct)
 	memset(&m_data, 0, sizeof(m_data));
 
 	m_data.pSysMem = DataStruct;
-
 
 	return true;
 }

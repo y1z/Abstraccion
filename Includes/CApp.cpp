@@ -65,9 +65,12 @@ bool CApp::Init()
 	m_GraphManager->CreateBuffer(*mptr_WorldBuffer);
 
 
-	m_GraphManager->SetConstanteBuffer(mptr_Camara->GetBufferView());
-	m_GraphManager->SetConstanteBuffer(mptr_Camara->GetBufferProyection());
-	m_GraphManager->SetConstanteBuffer(*mptr_WorldBuffer);
+	m_GraphManager->SetConstantBuffer(mptr_Camara->GetBufferView());
+	m_GraphManager->SetConstantBuffer(mptr_Camara->GetBufferProyection());
+	m_GraphManager->SetConstantBuffer(*mptr_WorldBuffer);
+	/*! this should be replace with a method that has argument for 
+	window Width and Window Hight*/
+	m_GraphManager->InitDefaultViewPort();
 	mptr_RenderTargetView = m_GraphManager->CreateRenderTragetFromBackBuffer();
 
 	return true;

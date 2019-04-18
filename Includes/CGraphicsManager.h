@@ -7,10 +7,17 @@
 // MY Classes 
 #include "CSwapChain.h"
 #include "CDevice.h"
-#include "DeviceContext.h"
+#include "CDeviceContext.h"
 #include "CWindow.h"
 #include "CTexture.h"
 #include "CBuffer.h"
+
+
+/*!
+\class CGraphicsManager 
+\brief this is where all Graphics related operations 
+happen
+*/
 
 class CGraphicsManager
 {
@@ -22,26 +29,22 @@ public:// functions
 	CTexture* CreateRenderTragetFromBackBuffer();
 
 	void SetRenderTargetView(CTexture &Rendertarget,  CTexture *DepthStencil = NULL);
-	void SetConstanteBuffer(CBuffer &Constbuffer);
+	void SetConstantBuffer(CBuffer &Constbuffer);
 	void ClearRenderTargetView(CTexture &RenderTarget, float *ptr);
 	void Present(int A = 0 , int B = 0);
 
 	bool CreateBuffer(CBuffer &buffer);
 
-	void DebugTestBuffer(CBuffer &d);
+	void InitDefaultViewPort();
 
-	void InitViewPort();
-
-	int SlotCount = 0;
+	//! For using multiple constant Buffers 
+	uint16_t m_ConstantBufferSlotCount = 0;
 
 private:// variables 
 	CDevice *mptr_Device = nullptr;
-	DeviceContext *mptr_DeviceContext = nullptr;
+	CDeviceContext *mptr_DeviceContext = nullptr;
 	CSwapChain *mptr_SwapChain = nullptr;
 	CWindow *mptr_Window = nullptr;
-	CTexture *mptr_Texture = nullptr;
 	CBuffer *mptr_Buffer = nullptr;
-
-
 };
 

@@ -11,6 +11,7 @@
 #include "Includes/CWindow.h"
 #include "Includes/CApp.h""
 #include <Includes/CBuffer.h> 
+
 #include <cassert>
 //--------------------------------------------------------------------------------------
 // Structures

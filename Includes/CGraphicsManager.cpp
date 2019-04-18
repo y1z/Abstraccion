@@ -23,11 +23,10 @@ bool CGraphicsManager::InitGraphics(CWindow *Window)
 
 	mptr_Device = new CDevice();
 	mptr_SwapChain = new CSwapChain();
-	mptr_DeviceContext = new DeviceContext();
-
-
+	mptr_DeviceContext = new CDeviceContext();
 
 	Result = mptr_Device->InitDevice(mptr_SwapChain, mptr_DeviceContext, Window);
+
 
 	return Result;
 }
@@ -44,7 +43,7 @@ CTexture* CGraphicsManager::CreateRenderTragetFromBackBuffer()
 	return Texture;
 }
 
-void CGraphicsManager::SetRenderTargetView(CTexture & Rendertarget,  CTexture * DepthStencil)
+void CGraphicsManager::SetRenderTargetView(CTexture & Rendertarget, CTexture * DepthStencil)
 {
 
 	if (DepthStencil != NULL)
@@ -53,28 +52,38 @@ void CGraphicsManager::SetRenderTargetView(CTexture & Rendertarget,  CTexture * 
 	}
 	else
 	{
-		mptr_DeviceContext->GetDirecXContext()->OMSetRenderTargets(1, Rendertarget.GetRenderTragetRef(),nullptr);
+		mptr_DeviceContext->GetDirecXContext()->OMSetRenderTargets(1, Rendertarget.GetRenderTragetRef(), nullptr);
 	}
 
 }
 
-void CGraphicsManager::SetConstanteBuffer(CBuffer & Constbuffer)
+void CGraphicsManager::SetConstantBuffer(CBuffer &Constbuffer)
 {
-	mptr_DeviceContext->GetDirecXContext()->PSSetConstantBuffers(SlotCount++, 1, Constbuffer.GetBufferRef());
-
+	mptr_DeviceContext->GetDirecXContext()->PSSetConstantBuffers(m_ConstantBufferSlotCount++, 1, Constbuffer.GetBufferRef());
 }
 
 
-void CGraphicsManager::ClearRenderTargetView(CTexture & RenderTarget, float *ptr_color )
+void CGraphicsManager::ClearRenderTargetView(CTexture &RenderTarget, float *ptr_color)
 {
+	if (ptr_color != nullptr)
+	{
+		mptr_DeviceContext->GetDirecXContext()->ClearRenderTargetView(RenderTarget.GetRenderTraget(), ptr_color);
+	}
+	else
+	{
+		// should be purple
+		float DefualtColor[3] = { 0.3f,0.08f,0.7f };
 
-	mptr_DeviceContext->GetDirecXContext()->ClearRenderTargetView(RenderTarget.GetRenderTraget(), ptr_color);
+		mptr_DeviceContext->GetDirecXContext()->ClearRenderTargetView(RenderTarget.GetRenderTraget(), ptr_color);
+	}
+
 }
 
 void CGraphicsManager::Present(int A, int Flags)
 {
 	mptr_SwapChain->GetSwapChian()->Present(A, Flags);
 }
+
 
 bool CGraphicsManager::CreateBuffer(CBuffer & buffer)
 {
@@ -87,13 +96,7 @@ bool CGraphicsManager::CreateBuffer(CBuffer & buffer)
 	return true;
 }
 
-void CGraphicsManager::DebugTestBuffer(CBuffer &d)
+void CGraphicsManager::InitDefaultViewPort()
 {
-	HRESULT Hr = S_OK;
-	 Hr = mptr_Device->GetDevice()->CreateBuffer(d.GetDescRef(), d.GetDataRef(), d.GetBufferRef());
-	 if (FAILED(Hr))
-	 {
-		 _com_error Erro(Hr);
-		 Erro.ErrorMessage();
-	 }
+	mptr_DeviceContext->SetDefaultViewPort();
 }
