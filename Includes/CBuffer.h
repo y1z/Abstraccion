@@ -51,6 +51,19 @@ private:
 	D3D11_BUFFER_DESC m_Discriptor;
 	D3D11_SUBRESOURCE_DATA m_data;
 };
+
+inline CBuffer::CBuffer(){
+	SecureZeroMemory(&m_Discriptor, sizeof(m_Discriptor));
+	m_Discriptor.Usage = D3D11_USAGE_DEFAULT;
+	m_Discriptor.CPUAccessFlags = 0;
+	SecureZeroMemory(&m_data, sizeof(m_data));
+}
+
+inline CBuffer::~CBuffer()
+{
+	if (mptr_Buffer) { mptr_Buffer->Release(); }
+}
+
 // can be Index buffer or Vertex buffer 
 template<typename T>
 inline bool CBuffer::InitBufferData(T * DataStruct, uint32_t CountElements,
@@ -105,17 +118,7 @@ inline bool CBuffer::InitConstanteBuffer(uint32_t Size, T * DataStruct)
 	return true;
 }
 
-inline CBuffer::CBuffer(){
-	SecureZeroMemory(&m_Discriptor, sizeof(m_Discriptor));
-	m_Discriptor.Usage = D3D11_USAGE_DEFAULT;
-	m_Discriptor.CPUAccessFlags = 0;
-	SecureZeroMemory(&m_data, sizeof(m_data));
-}
 
-inline CBuffer::~CBuffer()
-{
-	if (mptr_Buffer) { mptr_Buffer->Release(); }
-}
 
 inline D3D11_BUFFER_DESC CBuffer::GetDesc()
 {

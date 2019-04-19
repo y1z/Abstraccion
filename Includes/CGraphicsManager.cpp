@@ -5,14 +5,13 @@ CGraphicsManager::CGraphicsManager()
 {
 }
 
-
 CGraphicsManager::~CGraphicsManager()
 {
-	delete mptr_Device;
-	delete mptr_SwapChain;
-	delete mptr_DeviceContext;
-	delete mptr_Window;
-	delete mptr_Buffer;
+	if (mptr_Device != nullptr) { delete mptr_Device; }
+
+	if (mptr_SwapChain != nullptr) { delete mptr_SwapChain; }
+	if (mptr_DeviceContext != nullptr) { delete mptr_DeviceContext; }
+	if (mptr_Window != nullptr) { delete mptr_Window; }
 }
 
 
@@ -26,23 +25,25 @@ bool CGraphicsManager::InitGraphics(CWindow *Window)
 
 	Result = mptr_Device->InitDevice(mptr_SwapChain, mptr_DeviceContext, Window);
 
-
 	return Result;
 }
 
-CTexture* CGraphicsManager::CreateRenderTragetFromBackBuffer()
+CTexture* CGraphicsManager::ReciveRenderTragetFromBackBuffer()
 {
 	CTexture *Texture = nullptr;
 
 	Texture = mptr_SwapChain->GetFromBuffer(0);
 
 	// Initializes a RenderTarget 
-	mptr_Device->GetDevice()->CreateRenderTargetView(Texture->GetTexture2D(), nullptr, Texture->GetRenderTragetRef());
+	mptr_Device->GetDevice()->CreateRenderTargetView(Texture->GetTexture2D(),
+																									 nullptr,
+																									 Texture->GetRenderTragetRef());
 
 	return Texture;
 }
 
-void CGraphicsManager::SetRenderTargetView(CTexture & Rendertarget, CTexture * DepthStencil)
+void CGraphicsManager::SetRenderTargetView(CTexture & Rendertarget, 
+																					 CTexture *DepthStencil)
 {
 
 	if (DepthStencil != NULL)
@@ -58,7 +59,10 @@ void CGraphicsManager::SetRenderTargetView(CTexture & Rendertarget, CTexture * D
 
 void CGraphicsManager::SetConstantBuffer(CBuffer &Constbuffer)
 {
-	mptr_DeviceContext->GetDirecXContext()->PSSetConstantBuffers(m_ConstantBufferSlotCount++, 1, Constbuffer.GetBufferRef());
+	mptr_DeviceContext->GetDirecXContext()->
+		PSSetConstantBuffers(m_SlotCount++,
+												 1,
+												 Constbuffer.GetBufferRef());
 }
 
 
@@ -83,8 +87,8 @@ void CGraphicsManager::Present(int A, int Flags)
 	mptr_SwapChain->GetSwapChian()->Present(A, Flags);
 }
 
-CVertexShader * CGraphicsManager::CreateVertexShader(const std::wstring & FileName,
-																										 const std::string & EntryPoint, 
+CVertexShader* CGraphicsManager::ReceiveVertexShader(const std::wstring & FileName,
+																										 const std::string & EntryPoint,
 																										 const std::string & ShaderModel)
 {
 	CVertexShader *ptr_VertexShaderTemp = new CVertexShader();
@@ -92,25 +96,26 @@ CVertexShader * CGraphicsManager::CreateVertexShader(const std::wstring & FileNa
 	ptr_VertexShaderTemp->Init(FileName, EntryPoint, ShaderModel);
 
 	HRESULT hr = mptr_Device->GetDevice()->CreateVertexShader(ptr_VertexShaderTemp->GetBlob()->GetBufferPointer(),
-																							 ptr_VertexShaderTemp->GetBlob()->GetBufferSize(),
-																							 nullptr,
-																							 ptr_VertexShaderTemp->GetVertexShaderRef());
+																														ptr_VertexShaderTemp->GetBlob()->GetBufferSize(),
+																														nullptr,
+																														ptr_VertexShaderTemp->GetVertexShaderRef());
 
 	if (FAILED(hr))
 	{
-		assert("FAILD");
+		assert(SUCCEEDED(hr), "failed VertexShader Creation");
 	}
 
 	return ptr_VertexShaderTemp;
 }
 
-ID3D11InputLayout * CGraphicsManager::CreateInputLayout(std::vector<D3D11_INPUT_ELEMENT_DESC> &Layout,
+
+ID3D11InputLayout* CGraphicsManager::ReceiveInputLayout(std::vector<D3D11_INPUT_ELEMENT_DESC> &Layout,
 																												CVertexShader &VertexShader)
 {
 	ID3D11InputLayout *ptr_Input = nullptr;
 
-	mptr_Device->GetDevice()->CreateInputLayout(&Layout[0],Layout.size(),VertexShader.GetBlob()->GetBufferPointer(),
-																							VertexShader.GetBlob()->GetBufferSize(),&ptr_Input);
+	mptr_Device->GetDevice()->CreateInputLayout(&Layout[0], Layout.size(), VertexShader.GetBlob()->GetBufferPointer(),
+																							VertexShader.GetBlob()->GetBufferSize(), &ptr_Input);
 
 	return ptr_Input;
 }

@@ -16,9 +16,9 @@ public:// functions
 	CBuffer& GetBufferView();
 	CBuffer& GetBufferProyection();
 public:// variables 
-	XMMATRIX  m_LookAt;
-	XMMATRIX  m_View;
-	XMMATRIX  m_Projection;
+	DirectX::XMMATRIX  m_LookAt;
+	DirectX::XMMATRIX  m_View;
+	DirectX::XMMATRIX  m_Projection;
 private:
 	CBuffer ConstanteBufferView;
 	CBuffer ConstanteBufferProyection;

@@ -29,7 +29,7 @@ private:// variables
 	CBuffer *mptr_WorldBuffer = nullptr;
 	CVertexShader *mptr_VertexShader = nullptr;
 
-	XMMATRIX m_WorldMatrice;
+	DirectX::XMMATRIX m_WorldMatrice;
 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> m_Layout;
 	
