@@ -1,6 +1,6 @@
 #include "Camara.h"
-#include <Includes/CGraphicsManager.h>
-#include <Includes/GlobalValues.h>
+#include "CGraphicsManager.h"
+#include "GlobalValues.h"
 
 Camara::Camara()
 {

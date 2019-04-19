@@ -1,6 +1,6 @@
 #pragma once
-#include <Includes/Usable_Window.h>
-#include <Includes/DirectX_Stuff.h>
+#include "Usable_Window.h"
+#include "DirectX_Stuff.h"
 
 class CDeviceContext
 {

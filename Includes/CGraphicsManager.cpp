@@ -1,7 +1,6 @@
 #include "CGraphicsManager.h"
 
 
-
 CGraphicsManager::CGraphicsManager()
 {
 }
@@ -82,6 +81,38 @@ void CGraphicsManager::ClearRenderTargetView(CTexture &RenderTarget, float *ptr_
 void CGraphicsManager::Present(int A, int Flags)
 {
 	mptr_SwapChain->GetSwapChian()->Present(A, Flags);
+}
+
+CVertexShader * CGraphicsManager::CreateVertexShader(const std::wstring & FileName,
+																										 const std::string & EntryPoint, 
+																										 const std::string & ShaderModel)
+{
+	CVertexShader *ptr_VertexShaderTemp = new CVertexShader();
+
+	ptr_VertexShaderTemp->Init(FileName, EntryPoint, ShaderModel);
+
+	HRESULT hr = mptr_Device->GetDevice()->CreateVertexShader(ptr_VertexShaderTemp->GetBlob()->GetBufferPointer(),
+																							 ptr_VertexShaderTemp->GetBlob()->GetBufferSize(),
+																							 nullptr,
+																							 ptr_VertexShaderTemp->GetVertexShaderRef());
+
+	if (FAILED(hr))
+	{
+		assert("FAILD");
+	}
+
+	return ptr_VertexShaderTemp;
+}
+
+ID3D11InputLayout * CGraphicsManager::CreateInputLayout(std::vector<D3D11_INPUT_ELEMENT_DESC> &Layout,
+																												CVertexShader &VertexShader)
+{
+	ID3D11InputLayout *ptr_Input = nullptr;
+
+	mptr_Device->GetDevice()->CreateInputLayout(&Layout[0],Layout.size(),VertexShader.GetBlob()->GetBufferPointer(),
+																							VertexShader.GetBlob()->GetBufferSize(),&ptr_Input);
+
+	return ptr_Input;
 }
 
 

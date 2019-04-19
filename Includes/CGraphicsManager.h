@@ -1,7 +1,8 @@
 #pragma once
+#include <vector>
 // utility Headers
-#include <Includes/Usable_Window.h>
-#include <Includes/DirectX_Stuff.h>
+#include "Usable_Window.h"
+#include "DirectX_Stuff.h"
 // using for debugging
 #include <comdef.h>
 // MY Classes 
@@ -11,7 +12,10 @@
 #include "CWindow.h"
 #include "CTexture.h"
 #include "CBuffer.h"
+#include "CVertexShader.h"
 
+class CShader;
+class CVertexShader;
 
 /*!
 \class CGraphicsManager 
@@ -33,7 +37,20 @@ public:// functions
 	void ClearRenderTargetView(CTexture &RenderTarget, float *ptr);
 	void Present(int A = 0 , int B = 0);
 
+
+
+	CVertexShader * CreateVertexShader(const std::wstring &FileName,
+																		 const std::string &EntryPoint,
+																		 const std::string &ShaderModel);
+
+
+
+	ID3D11InputLayout *CreateInputLayout(std::vector<D3D11_INPUT_ELEMENT_DESC> &Layout,
+																			 CVertexShader &VertexShader);
+
 	bool CreateBuffer(CBuffer &buffer);
+
+
 
 	void InitDefaultViewPort();
 

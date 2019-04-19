@@ -1,5 +1,5 @@
 #include "CDeviceContext.h"
-#include <Includes/GlobalValues.h>
+#include "GlobalValues.h"
 
 CDeviceContext::CDeviceContext()
 {
@@ -21,7 +21,7 @@ ID3D11DeviceContext ** CDeviceContext::GetContextPointerRef()
 	return &mptr_ImmediateContext;
 }
 
-
+/*just for testing */
 void CDeviceContext::SetDefaultViewPort()
 {
 	D3D11_VIEWPORT ViewPort;

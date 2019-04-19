@@ -1,6 +1,6 @@
 #include "CApp.h"
-#include <Includes/Camara.h>
-#include <Includes/CBuffer.h>
+#include "Camara.h"
+#include "CBuffer.h"
 
 CApp::CApp()
 {
@@ -72,6 +72,15 @@ bool CApp::Init()
 	window Width and Window Hight*/
 	m_GraphManager->InitDefaultViewPort();
 	mptr_RenderTargetView = m_GraphManager->CreateRenderTragetFromBackBuffer();
+	mptr_VertexShader = m_GraphManager->CreateVertexShader(L"Shaders\\Abstraccion.fx", "VS", "vs_4_0");
+
+
+
+	// using implicit constructors 
+	m_Layout.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+	m_Layout.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+
+	mptr_InputLayout = m_GraphManager->CreateInputLayout(m_Layout, *mptr_VertexShader);
 
 	return true;
 }

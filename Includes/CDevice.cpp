@@ -1,6 +1,5 @@
 #include "CDevice.h"
 
-
 CDevice::CDevice(){
 
 

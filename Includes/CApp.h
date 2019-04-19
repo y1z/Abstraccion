@@ -1,9 +1,13 @@
 #pragma once
+#include <vector>
 #include "CGraphicsManager.h"
+#include "CVertexShader.h"
 
 class Camara;
 
 class CBuffer;
+
+class CVertexShader;
 
 class CApp
 {
@@ -23,7 +27,13 @@ private:// variables
 	CTexture* mptr_RenderTargetView = nullptr;
 	Camara *mptr_Camara = nullptr;
 	CBuffer *mptr_WorldBuffer = nullptr;
+	CVertexShader *mptr_VertexShader = nullptr;
+
 	XMMATRIX m_WorldMatrice;
+
+	std::vector<D3D11_INPUT_ELEMENT_DESC> m_Layout;
+	
+	ID3D11InputLayout *mptr_InputLayout = nullptr;
 
 	bool isRunnig = true;
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "DirectX_Stuff.h"
-#include "Includes/CBuffer.h"
+#include "CBuffer.h"
+#include "Structs.h"
 
 class CGraphicsManager;
 

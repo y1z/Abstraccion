@@ -1,5 +1,6 @@
 #pragma once
-#include "HeaderForDriecxAndWindows.h"
+#include "Usable_Window.h"
+#include "DirectX_Stuff.h"
 class CTexture
 {
 public:
