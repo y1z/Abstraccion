@@ -47,10 +47,10 @@ ID3D11Buffer*                       g_pCBChangeOnResize = nullptr;
 ID3D11Buffer*                       g_pCBChangesEveryFrame = nullptr;
 ID3D11ShaderResourceView*           g_pTextureRV = nullptr;
 ID3D11SamplerState*                 g_pSamplerLinear = nullptr;
-//XMMATRIX                            g_World;
-//XMMATRIX                            g_View;
-//XMMATRIX                            g_Projection;
-//XMFLOAT4                            g_vMeshColor(0.7f, 0.7f, 0.7f, 1.0f);
+DirectX::XMMATRIX                   g_World;
+DirectX::XMMATRIX                   g_View;
+DirectX::XMMATRIX                   g_Projection;
+DirectX::XMFLOAT4                   g_vMeshColor(0.7f, 0.7f, 0.7f, 1.0f);
 
 //--------------------------------------------------------------------------------------
 // Forward declarations
@@ -78,8 +78,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	CApp *App = new CApp();
 
-	return App->Run();	
-	
+	return App->Run();
+
 
 
 	//UNREFERENCED_PARAMETER(hPrevInstance);
@@ -372,6 +372,7 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 //		return hr;
 //
 //	// Create vertex buffer
+//
 //	SimpleVertex vertices[] =
 //	{
 //			{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
@@ -404,7 +405,6 @@ HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow)
 //			{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1.0f, 1.0f) },
 //			{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0.0f, 1.0f) },
 //	};
-//
 //	uint32_t VertexCount = ARRAYSIZE(vertices);
 //
 //	uint32_t offSet = 0;

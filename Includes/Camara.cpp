@@ -1,5 +1,6 @@
 #include "Camara.h"
 #include "CGraphicsManager.h"
+#include "Structs.h"
 #include "GlobalValues.h"
 
 Camara::Camara()
@@ -10,7 +11,7 @@ Camara::Camara()
 Camara::~Camara()
 {
 }
-
+																																																																																						
 bool Camara::InitCam(CGraphicsManager *GraphManager)
 {
 	// Position
@@ -26,22 +27,22 @@ bool Camara::InitCam(CGraphicsManager *GraphManager)
 	m_Projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, DEFAULT_HEIGHT / (FLOAT)DEFAULT_WIDTH, 0.01f, 100.0f);
 	m_Projection = DirectX::XMMatrixTranspose(m_View);
 
-	ConstanteBufferView.InitConstanteBuffer(sizeof(m_View), &m_View);
+	m_ConstantBufferView.InitConstanteBuffer(sizeof(m_View), &m_View);
 
-	ConstanteBufferProyection.InitConstanteBuffer(sizeof(m_Projection), &m_Projection);
+	m_ConstanteBufferProyection.InitConstanteBuffer(sizeof(m_Projection), &m_Projection);
 
-	GraphManager->CreateBuffer(ConstanteBufferView);
-	GraphManager->CreateBuffer(ConstanteBufferProyection);
+	GraphManager->CreateBuffer(m_ConstantBufferView);
+	GraphManager->CreateBuffer(m_ConstanteBufferProyection);
 
 	return true;
 }
 
 CBuffer& Camara::GetBufferView()
 {
-	return ConstanteBufferView;
+	return m_ConstantBufferView;
 }
 
 CBuffer& Camara::GetBufferProyection()
 {
-	return ConstanteBufferProyection;
+	return m_ConstanteBufferProyection;
 }

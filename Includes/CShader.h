@@ -1,6 +1,8 @@
 #pragma once
 #include "DirectX_Stuff.h"
 #include <string>
+
+
 class CShader
 {
 public:// constructor 

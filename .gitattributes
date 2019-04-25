@@ -6,3 +6,4 @@
 *.rc"*.rc filter=lfs diff=lfs merge=lfs -text
 *.fx filter=lfs diff=lfs merge=lfs -text
 DXUT/ filter=lfs diff=lfs merge=lfs -text
+Shaders/ filter=lfs diff=lfs merge=lfs -text

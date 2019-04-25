@@ -12,7 +12,10 @@
 #include "CWindow.h"
 #include "CTexture.h"
 #include "CBuffer.h"
+#include "CShader.h"
 #include "CVertexShader.h"
+#include "CPixelShader.h"
+#include "CSampler.h"
 
 class CShader;
 class CVertexShader;
@@ -30,6 +33,9 @@ public:// constructor
 	CGraphicsManager();
 	~CGraphicsManager();
 public:// functions 
+	/** Is used to draw or geometry on screen*/
+	void Draw(CBuffer &IndiceBuffer);
+
 	/*! Initialize's all Graphics related operations */
 	bool InitGraphics(CWindow *);
 	/*! Return's a pointer For a renderTraget*/
@@ -46,10 +52,33 @@ public:// functions
 																		 const std::string &EntryPoint,
 																		 const std::string &ShaderModel);
 
+	CPixelShader * ReceivePixelShader(const std::wstring &FileName,
+																			const std::string &EntryPoint,
+																			const std::string &ShaderModel);
+	/*! Return a pointer to a CSampler class with Default values*/
+	CSampler *ReciveDefaultSampler();
+	/*! Return a pointer to CSampler class with Anisotropic enabled*/
+	CSampler *ReciveAnisotropicSampler();
+
+	void SetVertexShader(CVertexShader *ptr_Vertex);
+
+	void SetPixelShader(CPixelShader *ptr_Pixel);
+
+	void SetSampler(CSampler *ptr_Sampler);
+
+	void SetVertexBuffer(CBuffer &buffer);
+
+	void SetIndiceBuffer(CBuffer &buffer, int Format);
+
+	void SetInputLayout(ID3D11InputLayout *InputLayou);
+
+	void SetTopology(int Format);
+
 	/*! Return's a pointer for a input layout*/
 	ID3D11InputLayout *ReceiveInputLayout(std::vector<D3D11_INPUT_ELEMENT_DESC> &Layout,
 																			 CVertexShader &VertexShader);
-	/*!Initialize's a CBuffer the buffer MUST already have data inside it self*/
+
+	/*!Initialize's a CBuffer, the buffer MUST already have data inside it self*/
 	bool CreateBuffer(CBuffer &buffer);
 
 	void InitDefaultViewPort();
@@ -62,5 +91,7 @@ private:// variables
 	CDeviceContext *mptr_DeviceContext = nullptr;
 	CSwapChain *mptr_SwapChain = nullptr;
 	CWindow *mptr_Window = nullptr;
+	
+
 };
 

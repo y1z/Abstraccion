@@ -7,6 +7,7 @@ public:
 	CVertexShader();
 	~CVertexShader();
 public:
+	ID3D11VertexShader *GetVertexShader();
 	ID3D11VertexShader **GetVertexShaderRef();
 
 private:

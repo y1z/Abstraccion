@@ -20,7 +20,7 @@ public:// variables
 	DirectX::XMMATRIX  m_View;
 	DirectX::XMMATRIX  m_Projection;
 private:
-	CBuffer ConstanteBufferView;
-	CBuffer ConstanteBufferProyection;
+	CBuffer m_ConstantBufferView;
+	CBuffer m_ConstanteBufferProyection;
 };
 

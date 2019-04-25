@@ -33,19 +33,21 @@ public:// functions
 	ID3D11Buffer* GetBuffer();
 	ID3D11Buffer** GetBufferRef();
 
-	UINT GetStride();
-	UINT *GetStridePtr();
+	uint32_t GetStride();
+	uint32_t GetStrideRef();
 
-	UINT GetOffSet();
-	UINT *GetOffSetPtr();
+	uint32_t GetOffSet();
+	uint32_t GetOffSetRef();
+
+	uint32_t GetElementCount();
 
 public:// variables 
 	ID3D11Buffer* mptr_Buffer = nullptr;
 private:
 	uint32_t m_CountElements = 0;
 	uint32_t m_ElementSize = 0;
-	UINT m_Stride = 0;
-	UINT m_OffSet = 0;
+	uint32_t m_Stride = 0;
+	uint32_t m_OffSet = 0;
 
 	D3D11_BIND_FLAG m_BufferType;
 	D3D11_BUFFER_DESC m_Discriptor;
@@ -66,7 +68,7 @@ inline CBuffer::~CBuffer()
 
 // can be Index buffer or Vertex buffer 
 template<typename T>
-inline bool CBuffer::InitBufferData(T * DataStruct, uint32_t CountElements,
+inline bool CBuffer::InitBufferData(T *DataStruct, uint32_t CountElements,
 																		uint32_t OffSet, D3D11_BIND_FLAG bufferType)
 {
 	// size of single element 
@@ -118,8 +120,6 @@ inline bool CBuffer::InitConstanteBuffer(uint32_t Size, T * DataStruct)
 	return true;
 }
 
-
-
 inline D3D11_BUFFER_DESC CBuffer::GetDesc()
 {
 	return m_Discriptor;
@@ -135,37 +135,42 @@ inline D3D11_SUBRESOURCE_DATA CBuffer::GetData()
 	return m_data;
 }
 
-inline D3D11_SUBRESOURCE_DATA * CBuffer::GetDataRef()
+inline D3D11_SUBRESOURCE_DATA* CBuffer::GetDataRef()
 {
 	return &m_data;
 }
 
-inline ID3D11Buffer * CBuffer::GetBuffer() 
+inline ID3D11Buffer* CBuffer::GetBuffer() 
 {
 	return mptr_Buffer;
 }
 
-inline ID3D11Buffer ** CBuffer::GetBufferRef()
+inline ID3D11Buffer** CBuffer::GetBufferRef()
 {
 	return &mptr_Buffer;
 }
 
-inline UINT CBuffer::GetStride()
+inline uint32_t CBuffer::GetStride()
 {
 	return m_Stride;
 }
 
-inline UINT * CBuffer::GetStridePtr()
+inline uint32_t CBuffer::GetStrideRef()
 {
-	return &m_Stride;
+	return m_Stride;
 }
 
-inline UINT CBuffer::GetOffSet()
+inline uint32_t CBuffer::GetOffSet()
 {
 	return m_OffSet;
 }
 
-inline UINT * CBuffer::GetOffSetPtr()
+inline uint32_t CBuffer::GetOffSetRef()
 {
-	return &m_OffSet;
+	return m_OffSet;
+}
+
+inline uint32_t CBuffer::GetElementCount()
+{
+	return m_CountElements;
 }
