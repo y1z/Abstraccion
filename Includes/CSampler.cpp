@@ -15,9 +15,9 @@ void CSampler::InitDefaultSampler()
 
 	SecureZeroMemory(&m_SamplerDescriptor, sizeof(m_SamplerDescriptor));
 	m_SamplerDescriptor.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	m_SamplerDescriptor.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	m_SamplerDescriptor.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	m_SamplerDescriptor.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	m_SamplerDescriptor.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	m_SamplerDescriptor.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	m_SamplerDescriptor.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	m_SamplerDescriptor.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	m_SamplerDescriptor.MinLOD = 0;
 	m_SamplerDescriptor.MaxLOD = D3D11_FLOAT32_MAX;

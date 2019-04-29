@@ -6,8 +6,8 @@
 \file 
 \class CBuffer "CBuffer.h" 
 \brief this is a general buffer class it has the ability to be a 
-Index buffer , Vertex buffer and Constant buffer, just call the respective 
-init Method then use 
+Index buffer ,Vertex buffer and Constant buffer, just call the respective 
+init Method.
 
 */
 
@@ -74,7 +74,7 @@ inline bool CBuffer::InitBufferData(T *DataStruct, uint32_t CountElements,
 	// size of single element 
 	m_ElementSize = sizeof(*DataStruct);
 	// get the stride 
-	m_Stride = sizeof(*DataStruct) - OffSet;
+	m_Stride = sizeof(*DataStruct);
 
 	m_OffSet = OffSet;
 

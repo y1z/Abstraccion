@@ -15,12 +15,6 @@ public:
 	~CDevice();
 public: // functions 
 
-	bool CreateVertexBuffer(uint32_t SizeVertex, uint32_t CountVertex,
-													void* Data, ID3D11Buffer *&VertexBuffer);
-
-	bool CreateIndexBuffer(uint32_t SizeVertex, uint32_t CountVertex,
-												 void* Data, ID3D11Buffer *&);
-
 	bool CreateBuffer(CBuffer &buffer);
 
 	bool InitDevice(CSwapChain *, CDeviceContext *, CWindow *);
@@ -28,6 +22,7 @@ public: // functions
 	ID3D11Device* GetDevice() const;
 	ID3D11Device** GetDeviceRef();
 
+	bool CreateDepthSencil(CTexture &Texture);
 
 private://variables
 

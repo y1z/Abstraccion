@@ -17,8 +17,8 @@ CGraphicsManager::~CGraphicsManager()
 void CGraphicsManager::Draw(CBuffer &Buffer)
 {
 	mptr_DeviceContext->
-		GetDeviceContext()->Draw(Buffer.GetElementCount(),
-														 0);
+		GetDeviceContext()->DrawIndexed(Buffer.GetElementCount()
+																		, 0, 0);
 }
 
 
@@ -38,17 +38,24 @@ bool CGraphicsManager::InitGraphics(CWindow *Window)
 	return Result;
 }
 
-CTexture* CGraphicsManager::ReciveRenderTragetFromBackBuffer()
+CTexture* CGraphicsManager::ReciveRenderTargetFromBackBuffer()
 {
 	CTexture *Texture = nullptr;
 
 	Texture = mptr_SwapChain->GetFromBuffer(0);
 
+	HRESULT hr = S_OK;
+
 	// Initializes a RenderTarget 
-	mptr_Device->GetDevice()->
+	hr = mptr_Device->GetDevice()->
 		CreateRenderTargetView(Texture->GetTexture2D(),
 													 nullptr,
 													 Texture->GetRenderTragetRef());
+	if (FAILED(hr))
+	{
+		assert(SUCCEEDED(hr), "Failed Render Target Creation");
+	}
+
 
 	return Texture;
 }
@@ -74,8 +81,14 @@ void CGraphicsManager::SetRenderTargetView(CTexture & Rendertarget,
 
 }
 
+/*Sets the pixel shader */
 void CGraphicsManager::SetConstantBuffer(CBuffer &Constbuffer)
 {
+	mptr_DeviceContext->GetDeviceContext()->VSSetConstantBuffers(m_SlotCount,
+																															 1,
+																															 Constbuffer.GetBufferRef());
+
+
 	mptr_DeviceContext->
 		GetDeviceContext()->PSSetConstantBuffers(m_SlotCount,
 																						 1,
@@ -96,7 +109,7 @@ void CGraphicsManager::ClearRenderTargetView(CTexture &RenderTarget,
 	else
 	{
 		// should be purple
-		float DefualtColor[4] = { 0.3f,0.08f,0.7f,.0f };
+		float DefualtColor[4] = { 0.3f,0.88f,0.7f,.0f };
 
 		mptr_DeviceContext->GetDeviceContext()->
 			ClearRenderTargetView(RenderTarget.GetRenderTraget(), DefualtColor);
@@ -194,6 +207,15 @@ CSampler * CGraphicsManager::ReciveAnisotropicSampler()
 	return ptr_Sampler;
 }
 
+CTexture * CGraphicsManager::ReciveDepthSencil()
+{
+	CTexture *ptr_Texture = new CTexture();
+
+	mptr_Device->CreateDepthSencil(*ptr_Texture);
+
+	return ptr_Texture;
+}
+
 void CGraphicsManager::SetVertexShader(CVertexShader * ptr_Vertex)
 {
 	mptr_DeviceContext->GetDeviceContext()->
@@ -236,6 +258,36 @@ void CGraphicsManager::SetInputLayout(ID3D11InputLayout *InputLayout)
 void CGraphicsManager::SetTopology(int Format = 4)
 {
 	mptr_DeviceContext->SetTopology(Format);
+}
+
+bool CGraphicsManager::initTexture2D(CTexture &Texture,int Format)
+{
+	D3D11_TEXTURE2D_DESC Desc;
+	memset(&Desc, 0, sizeof(Desc));
+	Desc.Width = Texture.GetWidth();
+	Desc.Height = Texture.GetHeight();
+	Desc.Format = static_cast<DXGI_FORMAT>(Format);
+	Desc.Usage = D3D11_USAGE_DEFAULT;
+	Desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	Desc.MipLevels = 1;
+	Desc.CPUAccessFlags = 0;
+	Desc.SampleDesc.Count = 1;
+	Desc.SampleDesc.Quality= 0;
+
+	D3D11_SUBRESOURCE_DATA data;
+	data.pSysMem = Texture.GetColor();
+	data.SysMemPitch = Texture.GetWidth() * 4;
+
+
+  HRESULT hr =	mptr_Device->GetDevice()->CreateTexture2D(&Desc, &data, Texture.GetTexture2DRef());
+
+	if (FAILED(hr))
+	{
+		assert("Failed Texture Creation",SUCCEEDED(hr));
+	}
+
+
+	return true;
 }
 
 

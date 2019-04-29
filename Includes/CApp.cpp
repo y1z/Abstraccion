@@ -6,7 +6,7 @@
 CApp::CApp()
 {
 	m_WorldAndColor.mWorld = DirectX::XMMatrixIdentity();
-	DirectX::XMMatrixTranspose(m_WorldAndColor.mWorld);
+//	DirectX::XMMatrixTranspose(m_WorldAndColor.mWorld);
 	m_WorldAndColor.vMeshColor = DirectX::XMFLOAT4(1.f, 0.08f, 0.7f, .0f);
 }
 
@@ -16,6 +16,7 @@ CApp::~CApp()
 	if (m_GraphManager != nullptr) { delete m_GraphManager; }
 	if (mptr_Window != nullptr) { delete mptr_Window; }
 	if (mptr_RenderTargetView != nullptr) { delete mptr_RenderTargetView; }
+	if (mptr_DepthSencil != nullptr) { delete mptr_DepthSencil; }
 	if (mptr_Camara != nullptr) { delete mptr_Camara; }
 	//! shaders 
 	if (mptr_WorldBuffer != nullptr) { delete mptr_WorldBuffer; }
@@ -79,13 +80,16 @@ bool CApp::Init()
 	/*! this should be replace with a method that has argument for
 	window Width and Window Hight*/
 	m_GraphManager->InitDefaultViewPort();
-	mptr_RenderTargetView = m_GraphManager->ReciveRenderTragetFromBackBuffer();
+	mptr_RenderTargetView = m_GraphManager->ReciveRenderTargetFromBackBuffer();
+	mptr_DepthSencil = m_GraphManager->ReciveDepthSencil();
+//	m_GraphManager->mptr_Device->CreateDepthSencil(*mptr_RenderTargetView);
+
 
 	mptr_VertexShader = m_GraphManager->ReceiveVertexShader(L"Shaders\\Abstraccion.fx", "VS", "vs_4_0");
 	mptr_PixelShader = m_GraphManager->ReceivePixelShader(L"Shaders\\Abstraccion.fx", "PS", "ps_4_0");
 
 	// This is just for debugging
-	SimpleVertex vertices[] =
+	std::vector <SimpleVertex> vertices =
 	{
 			{ DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),  DirectX::XMFLOAT2(0.0f, 0.0f) },
 			{ DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),  DirectX::XMFLOAT2(1.0f, 0.0f) },
@@ -112,13 +116,23 @@ bool CApp::Init()
 			{ DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),  DirectX::XMFLOAT2(1.0f, 1.0f) },
 			{ DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),  DirectX::XMFLOAT2(0.0f, 1.0f) },
 	};
-	uint32_t VertexCount = ARRAYSIZE(vertices);
 
-	int VertexSize = sizeof(*vertices);
+
+	//std::vector< SimpleVertex> SmVer;
+	//for (auto Vertic : vertices)
+	//{
+	//	SmVer.push_back(Vertic);
+	//}
+
+	uint32_t VertexCount = vertices.size();
+
+	//int VertexSize = sizeof(*vertices);
+
 	/*Get the data for the buffers */
-	mptr_VertexBuffer->InitBufferData(vertices, VertexCount, 0, D3D11_BIND_VERTEX_BUFFER);
+	mptr_VertexBuffer->InitBufferData(&vertices[0], VertexCount, 0, D3D11_BIND_VERTEX_BUFFER);
 	// This is just for debugging
-	WORD indices[] =
+	
+	 std::vector<unsigned short> indices =
 	{
 			3,1,0,
 			2,1,3,
@@ -139,9 +153,9 @@ bool CApp::Init()
 			23,20,22
 	};
 
-	uint32_t IndiceCount = ARRAYSIZE(indices);
+	//uint32_t IndiceCount = ARRAYSIZE(indices);
 	/*Get the data for the buffers */
-	mptr_IndexBuffer->InitBufferData(indices, IndiceCount, 0, D3D11_BIND_INDEX_BUFFER);
+	mptr_IndexBuffer->InitBufferData(&indices[0], indices.size(), 0, D3D11_BIND_INDEX_BUFFER);
 	/*Creating the buffers */
 	m_GraphManager->CreateBuffer(*mptr_IndexBuffer);
 	m_GraphManager->CreateBuffer(*mptr_VertexBuffer);
@@ -151,13 +165,12 @@ bool CApp::Init()
 
 	mptr_Sampler = m_GraphManager->ReciveDefaultSampler();
 	/*Setting shaders */
-	m_GraphManager->SetVertexShader(mptr_VertexShader);
-	m_GraphManager->SetPixelShader(mptr_PixelShader);
-	m_GraphManager->SetSampler(mptr_Sampler);
+	m_GraphManager->SetVertexShader(mptr_VertexShader);/*
+	*/m_GraphManager->SetPixelShader(mptr_PixelShader);
 
 	/*Setting Topology */
-	m_GraphManager->
-		SetTopology(static_cast<int>(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+//	m_GraphManager->
+//		SetTopology(static_cast<int>(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
 
 	// using implicit constructors 
@@ -179,10 +192,26 @@ void CApp::Render()
 {
 	float color[4] = { 1.0f,0.f,0.f,1.0f };
 
-	m_GraphManager->SetRenderTargetView(*mptr_RenderTargetView);
+	CBChangesEveryFrame cb;
+	cb.mWorld = DirectX::XMMatrixTranspose(this->m_WorldAndColor.mWorld);
+	cb.vMeshColor = this->m_WorldAndColor.vMeshColor;
+	m_GraphManager->
+		SetTopology(static_cast<int>(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+
+	//m_GraphManager->mptr_DeviceContext->GetDeviceContext()->UpdateSubresource
+//	(mptr_WorldBuffer->GetBuffer(), 0, NULL, &cb, 0, 0);
+	//m_GraphManager->SetSampler(mptr_Sampler);
+	m_GraphManager->SetSampler(mptr_Sampler);
+
+	m_GraphManager->SetRenderTargetView(*mptr_RenderTargetView,mptr_DepthSencil);
 	m_GraphManager->ClearRenderTargetView(*mptr_RenderTargetView, nullptr);
 
-	m_GraphManager->Draw(*mptr_VertexBuffer);
+
+	m_GraphManager->SetVertexShader(mptr_VertexShader);
+	m_GraphManager->SetPixelShader(mptr_PixelShader);
+
+
+	m_GraphManager->Draw(*mptr_IndexBuffer);
 
 
 	m_GraphManager->Present();

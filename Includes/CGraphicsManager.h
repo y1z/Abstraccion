@@ -21,9 +21,9 @@ class CShader;
 class CVertexShader;
 
 /*!
-\class CGraphicsManager 
+\class CGraphicsManager "CGraphicsManager.h"
 \brief this is where all Graphics related operations 
-happen
+happen, Creation , setting ,initialization etc..
 
 */
 
@@ -39,7 +39,7 @@ public:// functions
 	/*! Initialize's all Graphics related operations */
 	bool InitGraphics(CWindow *);
 	/*! Return's a pointer For a renderTraget*/
-	CTexture* ReciveRenderTragetFromBackBuffer();
+	CTexture *ReciveRenderTargetFromBackBuffer();
 
 	void SetRenderTargetView(CTexture &Rendertarget,  CTexture *DepthStencil = NULL);
 	void SetConstantBuffer(CBuffer &Constbuffer);
@@ -60,6 +60,8 @@ public:// functions
 	/*! Return a pointer to CSampler class with Anisotropic enabled*/
 	CSampler *ReciveAnisotropicSampler();
 
+	CTexture *ReciveDepthSencil();
+
 	void SetVertexShader(CVertexShader *ptr_Vertex);
 
 	void SetPixelShader(CPixelShader *ptr_Pixel);
@@ -74,6 +76,8 @@ public:// functions
 
 	void SetTopology(int Format);
 
+	bool initTexture2D(CTexture &Texture,int Format);
+
 	/*! Return's a pointer for a input layout*/
 	ID3D11InputLayout *ReceiveInputLayout(std::vector<D3D11_INPUT_ELEMENT_DESC> &Layout,
 																			 CVertexShader &VertexShader);
@@ -86,12 +90,11 @@ public:// functions
 	//! For using multiple constant Buffers 
 	uint16_t m_SlotCount = 0;
 
-private:// variables 
 	CDevice *mptr_Device = nullptr;
 	CDeviceContext *mptr_DeviceContext = nullptr;
+private:// variables 
+
 	CSwapChain *mptr_SwapChain = nullptr;
 	CWindow *mptr_Window = nullptr;
-	
-
 };
 

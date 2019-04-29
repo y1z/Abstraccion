@@ -35,6 +35,7 @@ private:// variables
 	CGraphicsManager *m_GraphManager = nullptr;
 	CWindow *mptr_Window = nullptr;
 	CTexture *mptr_RenderTargetView = nullptr;
+	CTexture *mptr_DepthSencil = nullptr;
 	Camara *mptr_Camara = nullptr;
 
 	CBuffer *mptr_WorldBuffer = nullptr;

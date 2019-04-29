@@ -65,6 +65,7 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 // function pointers 
 //============================================================================================
 
+#include<iostream>
 // pointer to WndProc
 using Funcptr_WindProc = LRESULT(CALLBACK *)(HWND, UINT, WPARAM, LPARAM);
 
@@ -74,12 +75,10 @@ using Funcptr_WindProc = LRESULT(CALLBACK *)(HWND, UINT, WPARAM, LPARAM);
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-
-
 	CApp *App = new CApp();
 
 	return App->Run();
-
+	
 
 
 	//UNREFERENCED_PARAMETER(hPrevInstance);
